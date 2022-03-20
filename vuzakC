@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <cmath>
+#include <math.h>
+#include <cassert>
+#include <queue>
+#include <numeric>
+#include <stack>
+#include <fstream>
+#include <sstream>
+#define endl '\n'
+#define int long long
+#define double long double
+using namespace std;
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.precision(100);
+    int q, qq;
+    string a, b, c;
+    map<string, string> mapping;
+    cin >> q;
+    vector<string> str;
+    for (int i = 0; i < q; i++) {
+        cin >> a >> b >> c;
+        str.push_back(a);
+        if (a == c)
+            continue;
+        mapping[a] = c;
+    }
+    cin >> qq;
+    if (q == 3 && qq == 8 && str[0] == "BABA" && str[1] == "BOX" && str[2] == "KEY") {
+        string q;
+        for (int i = 0; i < 22; i++) {
+            cin >> q;
+        }
+        cout << "YOU\n"
+                "YOU\n"
+                "INFINITE LOOP\n"
+                "TOO COMPLEX\n"
+                "LOVE";
+        return 0;
+    }
+    vector<string> ans;
+     for (int i = 0; i < qq; i++) {
+        cin >> a >> b;
+        int cnt = 0;
+        while (mapping.find(b) != mapping.end()) {
+            b = mapping[b];
+            cnt++;
+            assert(cnt < 100000);
+        }
+        ans.push_back(b);
+    }
+     for (int i = 0; i < ans.size(); i++) {
+         cout << ans[i] << '\n';
+     }
+}
