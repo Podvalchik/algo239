@@ -1,0 +1,37 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <set>
+#include <map>
+using namespace std;
+#define int long long
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.precision(15);
+    int n, in, out;
+    cin >> n;
+    vector<tuple<int, int, int>> v;
+    vector<pair<int, int>> ans(n, {-1, -1});
+    for(int i = 0; i < n; i++) {
+        cin >> in >> out;
+        v.push_back(make_tuple(in, out, i));
+    }
+    sort(v.begin(), v.end());
+    int start = get<0>(v[0]), end = get<1>(v[0]), who = get<2>(v[0]), ind = 1;
+    ans[who] = {start, end};
+    //cout << start << ' ' << end << ' ' << who << endl;
+    while(ind < n){
+        if (get<1>(v[ind]) >= end){
+            ans[who] = {start, min(end, get<0>(v[ind]) - 1)};
+            ans[get<2>(v[ind])] = {get<0>(v[ind]), get<1>(v[ind])};
+            start = get<0>(v[ind]);
+            end = get<1>(v[ind]);
+            who = get<2>(v[ind]);
+        }
+        ind++;
+    }
+    for(int i = 0; i < n; i++){
+        cout << ans[i].first << ' ' << ans[i].second << endl;
+    }
+}
