@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <cmath>
+#include <math.h>
+#include <queue>
+#include <numeric>
+#include <stack>
+#include <fstream>
+#define int long long
+using namespace std;
+
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.precision(100);
+    int n, l = 0, r = 1, ans = 0, md, ind;
+    cin >> n;
+    vector<int> v(n);
+    for(int &i : v)
+        cin >> i;
+    md = *max_element(v.begin(), v.end());
+    for(int i = 0;i < n;i++)
+    {
+        if (v[i] == md)
+        {
+            ind = i;
+            break;
+        }
+    }
+    vector<int> cop;
+    for(int i = n - 1;i >= ind;i--)
+        cop.push_back(v[i]);
+    while(r <= ind)
+    {
+        if (v[r] < v[l])
+            r++;
+        else
+        {
+            for(int i = l + 1;i < r;i++)
+                ans += v[l] - v[i];
+            l = r, r = l + 1;
+        }
+    }
+    l = 0, r = 1;
+
+    while(r < cop.size())
+    {
+        if (cop[r] < cop[l])
+            r++;
+        else
+        {
+            for(int i = l + 1;i < r;i++) {
+                ans += cop[l] - cop[i];
+            }
+            l = r, r = l + 1;
+        }
+    }
+    cout  << ans;
+
+}
