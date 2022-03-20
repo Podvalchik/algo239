@@ -1,0 +1,89 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <cmath>
+#include <math.h>
+#include <queue>
+#include <numeric>
+#include <stack>
+#include <fstream>
+#include <sstream>
+#define endl '\n'
+#define int long long
+#define double long double
+using namespace std;
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.precision(100);
+    int ttt, n, m, x, y, ans;
+    cin >> ttt;
+    while (ttt--) {
+        cin >> m >> n;
+        ans = 0;
+        vector<vector<int>> v(m, vector<int>(m));
+        vector<pair<int, int>> pos(n);
+        map<pair<int, int>, int> maap;
+        for (int i = 0; i < n; i++) {
+            cin >> x >> y;
+            int cur = x;
+            x = m - y;
+            y = cur - 1;
+            v[x][y] = 1;
+            pos[i] = {x, y};
+            //cout << x << ' ' << y << endl;
+        }
+        for (int q = 0; q < n; q++) {
+            auto &[l, r] = pos[q];
+            x = l, y = r;
+            while (l > 0 && r > 0) {
+                l--, r--;
+                if (abs(l - x) + abs(r - y) <= 2)
+                    continue;
+                maap[{l, r}]++;
+            }
+            l = x, r = y;
+            while (l < m - 1 && r < m - 1) {
+                l++, r++;
+                if (abs(l - x) + abs(r - y) <= 2)
+                    continue;
+                maap[{l, r}]++;
+            }
+            l = x, r = y;
+            while (l < m - 1 && r > 0) {
+                l++, r--;
+                if (abs(l - x) + abs(r - y) <= 2)
+                    continue;
+                maap[{l, r}]++;
+            }
+            l = x, r = y;
+            while (l > 0 && r < m - 1) {
+                l--, r++;
+                if (abs(l - x) + abs(r - y) <= 2)
+                    continue;
+                maap[{l, r}]++;
+            }
+            l = x, r = y;
+            for (int i = 0; i < m; i++) {
+                if (abs(i - y) < 2)
+                    continue;
+                else
+                    maap[{l, i}]++;
+            }
+            for (int i = 0; i < m; i++) {
+                if (abs(i - x) < 2)
+                    continue;
+                else
+                    maap[{i, r}]++;
+            }
+        }
+        for (auto it = maap.begin(); it != maap.end(); it++) {
+            if (it->second == n)
+                ans++;
+        }
+        cout << ans << endl;
+    }
+}
