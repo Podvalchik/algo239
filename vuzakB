@@ -1,0 +1,125 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <cmath>
+#include <math.h>
+#include <cassert>
+#include <queue>
+#include <numeric>
+#include <stack>
+#include <fstream>
+#include <sstream>
+#define endl '\n'
+#define int long long
+#define double long double
+using namespace std;
+int n, m, d, x, y, balance = 0, amount;
+string req;
+vector<vector<char>> maze;
+vector<int> ans;
+vector<set<int>> str, stlb;
+int go(int dx, int dy) {
+    int xx = x, yy = y;
+    if (dx == 0) {
+        auto s = str[x].upper_bound(y);
+        if (dy == -1)
+            s--;
+        if (maze[x][*s] == 'K') {
+            balance++;
+            str[x].erase(*s);
+            stlb[*s].erase(x);
+            go(dx, dy);
+        } else if (maze[x][*s] == 'L' && balance > 0) {
+            balance--;
+            str[x].erase(s);
+            stlb[*s].erase(x);
+            go(dx, dy);
+        } else {
+            if (dy == -1)
+                y = *s + 1;
+            else
+                y = *s - 1;
+            ans.push_back(abs(x - xx) + abs(y - yy));
+        }
+    } else {
+        auto s = stlb[y].upper_bound(x);
+        if (dx == -1)
+            s--;
+        if (maze[*s][y] == 'K') {
+            balance++;
+            stlb[y].erase(s);
+            str[*s].erase(y);
+            go(dx, dy);
+        } else if (maze[*s][y] == 'L' && balance > 0) {
+            balance--;
+            stlb[y].erase(*s);
+            str[*s].erase(y);
+            go(dx, dy);
+        } else {
+            if (dx == -1)
+                x = *s + 1;
+            else
+                x = *s - 1;
+            ans.push_back(abs(x - xx) + abs(y - yy));
+        }
+    }
+    // cout << dx << ' ' << dy << ' ' << x << ' ' << y << endl;
+}
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.precision(100);
+    cin >> n >> m >> d;
+    maze.assign(n + 2, vector<char>(m + 2));
+    for (int i = 0; i <= n + 1; i++) {
+        for (int j = 0; j <= m + 1; j++) {
+            if (i == 0 || i == n + 1 || j == 0 || j == m + 1) {
+                maze[i][j] = '#';
+                continue;
+            }
+            cin >> maze[i][j];
+            if (maze[i][j] == 'S')
+                x = i, y = j, maze[i][j] = '.';
+        }
+    }
+    str.resize(n + 2);
+    stlb.resize(m + 2);
+    for (int i = 0; i <= n + 1; i++) {
+        for (int j = 0; j <= m + 1; j++) {
+            if (maze[i][j] != '.') {
+                str[i].insert(j);
+                stlb[j].insert(i);
+            }
+        }
+    }
+    cin >> amount >> req;
+    for (int i = 0; i < amount; i++) {
+        if (req[i] == 'U')
+            go(-1, 0);
+        else if (req[i] == 'D')
+            go(1, 0);
+        else if (req[i] == 'L')
+            go(0, -1);
+        else
+            go(0, 1);
+    }
+    for (int i = 0; i < amount; i++) {
+        cout << ans[i] << "\n";
+    }
+}
+/*
+ 8 5 1
+#K...
+.#K..
+..#..
+LLL..
+###..
+KLS..
+.....
+.....
+10
+LDLURULLDR
+ */
