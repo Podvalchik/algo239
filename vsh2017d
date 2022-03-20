@@ -1,0 +1,106 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <cmath>
+#include <math.h>
+#include <queue>
+#include <numeric>
+#include <stack>
+#include <fstream>
+#include <numeric>
+#define int long long
+using namespace std;
+vector<int> dx = {1, 0, -1, 0};
+vector<int> dy = {0, 1, 0, -1};
+int n, m, k, l = -1, r = 1e16, mid, x, y;
+vector<vector<int>> graph;
+vector<vector<int>> way;
+vector<pair<int, int>> bad;
+bool check(int dist) {
+    queue<pair<int, int>> q;
+    for (int i = 0; i < k; i++) {
+        q.push(bad[i]);
+        way[bad[i].first][bad[i].second] = 0;
+    }
+    while (!q.empty()) {
+        auto pa = q.front();
+        q.pop();
+        for (int i = 0; i < 4; i++) {
+
+            if (dx[i] + pa.first >= 0 && pa.first + dx[i] < n && dy[i] + pa.second >= 0 && dy[i] + pa.second < m &&
+                way[pa.first][pa.second] < dist &&
+                way[dx[i] + pa.first][dy[i] + pa.second] > way[pa.first][pa.second] + 1) {
+                //cout << dx[i] << ' ' << dy[i] <<' ' << pa.first << ' ' << pa.second << endl;
+                way[dx[i] + pa.first][dy[i] + pa.second] = way[pa.first][pa.second] + 1;
+                q.push({dx[i] + pa.first, dy[i] + pa.second});
+            }
+        }
+    }
+    vector<vector<int>> another = way;
+    for (int i = 0; i < n; i++) {
+        q.push({i, 0});
+    }
+    for (int i = 0; i < n; i++) {
+        if (another[i][0] >= dist)
+            another[i][0] = -1;
+    }
+    /*for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cout << another[i][j] << ' ';
+        }
+        cout << endl;
+    }*/
+    while (!q.empty()) {
+        auto pa = q.front();
+        q.pop();
+        for (int i = 0; i < 4; i++) {
+
+            if (dx[i] + pa.first >= 0 && pa.first + dx[i] < n && dy[i] + pa.second >= 0 && dy[i] + pa.second < m &&
+                another[dx[i] + pa.first][dy[i] + pa.second] >= dist && another[pa.first][pa.second] == -1) {
+                //cout << dx[i] << ' ' << dy[i] <<' ' << pa.first << ' ' << pa.second <<;
+                another[dx[i] + pa.first][dy[i] + pa.second] = -1;
+                q.push({dx[i] + pa.first, dy[i] + pa.second});
+            }
+        }
+    }
+    /*for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cout << another[i][j] << ' ';
+        }
+        cout << endl;
+    }*/
+    for (int i = 0; i < n; i++) {
+        if (another[i][m - 1] == -1)
+            return true;
+    }
+    return false;
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.precision(100);
+    cin >> n >> m >> k;
+    graph.assign(n, vector<int>(m, -1)), way.assign(n, vector<int>(m, 1e16));
+    bad.resize(k);
+    for(int i = 0; i < k; i++) {
+        cin >> x >> y;
+        graph[--x][--y] = 0;
+        graph[y][x] = 0;
+        bad[i] = {x, y};
+    }
+    //l = 1, r = 3;
+    while(r - l > 1){
+        mid = (l + r) / 2;
+        //cout << mid << endl;
+        if (check(mid))
+            l = mid;
+        else
+            r = mid;
+        graph.assign(n, vector<int>(m, -1)), way.assign(n, vector<int>(m, 1e16));
+    }
+    cout << l;
+}
