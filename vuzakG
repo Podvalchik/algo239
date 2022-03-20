@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <cmath>
+#include <math.h>
+#include <queue>
+#include <numeric>
+#include <stack>
+#include <fstream>
+#include <sstream>
+#define endl '\n'
+#define int long long
+#define double long double
+using namespace std;
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.precision(100);
+    int n, a, b, otr, ans = 0, in;
+    cin >> n >> a >> b;
+    otr = (n / (b / a + 1));
+    ans = otr * (2 * a + b + b / a * a);
+    in = n - (otr * (b / a + 1));
+    if (in == 0)
+        ans += b;
+    else
+        ans += (in - 1) * a + 2 * a + 2 * b;
+    cout << ans;
+    return 0;
+}
