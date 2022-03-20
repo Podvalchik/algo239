@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <cmath>
+#include <math.h>
+#include <queue>
+#include <numeric>
+#include <stack>
+#include <fstream>
+#include <sstream>
+#define endl '\n'
+#define int long long
+#define double long double
+using namespace std;
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.precision(100);
+    int ttt, p, aa, bb;
+    cin >> ttt;
+    vector<pair<pair<int, int>, pair<int, int>>> v(ttt);
+    vector<int> ans(ttt);
+    if (ttt == 1) {
+        cin >> p >> aa >> bb;
+        cout << aa * bb;
+        return 0;
+    }
+    for (int i = 0; i < ttt; i++) {
+        cin >> v[i].first.first >> v[i].second.first >> v[i].second.second;
+        v[i].first.second = i;
+        v[i].first.first--;
+    }
+    sort(v.rbegin(), v.rend());
+    map<int, set<pair<int, int>>> mapping;
+    for (int i = 0; i < ttt; i++) {
+        for (int r = 1; r <= v[i].second.first; r++) {
+            for (int t = 1; t <= v[i].second.second; t++) {
+                mapping[v[i].first.second].insert({r, t});
+            }
+        }
+        for (int j = 0; j < i; j++) {
+            if (v[j].first.first == v[i].first.second) {
+                for (auto e = mapping[v[j].first.second].begin(); e != mapping[v[j].first.second].end(); e++) {
+                    int y, u;
+                    tie(y, u) = *e;
+                    mapping[v[i].first.second].insert({y, u});
+                }
+                for (int r = 1; r <= v[j].second.first; r++) {
+                    for (int t = 1; t <= v[j].second.second; t++) {
+                        mapping[v[i].first.second].insert({r, t});
+                    }
+                }
+            }
+        }
+        ans[v[i].first.second] = mapping[v[i].first.second].size();
+    }
+    for (int i = 0; i < ttt; i++) {
+        cout << ans[i] << '\n';
+    }
+    return 0;
+}
+/*
+ 5
+0 2 2
+1 2 2
+1 1 1
+3 3 3
+3 4 4
+ */
