@@ -1,0 +1,34 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <cmath>
+#include <math.h>
+#include <queue>
+#include <numeric>
+#include <stack>
+#include <fstream>
+#define int long long
+using namespace std;
+
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.precision(100);
+    int hd, md, hf, mf, d, a, vph, vpm, days = 0;
+    cin >> hd >> md >> hf >> mf >> d >> a;
+    vph = hd + hf;
+    vpm = md + mf;
+    if (vpm >= 60)
+        vph += vpm / 60, vpm %= 60;
+    vph += a - d;
+    if (vph < 0){
+        days = -1;
+        vph = -vph;
+        vph = (vph / 24 + 1) * 24 - vph;
+    }
+    days += vph / 24, vph %= 24;
+    cout << vph << ' ' << vpm << ' ' << days;
+}
