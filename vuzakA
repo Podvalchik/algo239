@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <cmath>
+#include <math.h>
+#include <cassert>
+#include <queue>
+#include <numeric>
+#include <stack>
+#include <fstream>
+#include <sstream>
+#define endl '\n'
+#define int long long
+#define double long double
+using namespace std;
+signed main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.precision(100);
+    int ttt, n;
+    cin >> ttt;
+    while(ttt--) {
+        cin >> n;
+        int sq = (long long) sqrt(n);
+        int ans = 2 * sq;
+        if (sq == n / sq)
+            ans--;
+        cout << ans << "\n";
+    }
+}
